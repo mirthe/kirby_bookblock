@@ -5,32 +5,37 @@
     'tags' => [
         'bookblock' => [
             'attr' =>[
-                'tmdb'
+                'isbn'
             ],
             'html' => function($tag) {
 
                 $isbn = $tag->isbn;
                 
-                $url = "https://openlibrary.org/isbn/0593135202.json"; // deze redirect naar onderstaande, grr.
-                $url = "https://openlibrary.org/books/OL30036715M.json";
+                $url = "https://openlibrary.org/isbn/".$isbn.".json";
                 $ch = curl_init($url);
+                curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
                 $rawdata = curl_exec($ch);
                 curl_close($ch);
                 $bookinfo = json_decode($rawdata,true);
                 // print_r($bookinfo); exit(); 
 
-                // $url = "https://api.themoviedb.org/3/movie/". $tmdbid ."/credits?api_key=" . $api_key;
-                // $ch = curl_init($url);
-                // curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-                // $rawdata_credits = curl_exec($ch);
-                // curl_close($ch);
-                // $credits = json_decode($rawdata_credits,true);
+                // TODO loop by authors[]
+                $authorkey = $bookinfo['authors'][0]['key'];
+                $url = "https://openlibrary.org".$authorkey.".json";
+                $ch = curl_init($url);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+                $rawdata_credits = curl_exec($ch);
+                curl_close($ch);
+                $author = json_decode($rawdata_credits,true);
+                // print_r($author); exit();
                 
                 $mijnoutput = '<div class="well" style="overflow: auto;">';
                 $mijnoutput .= '<img src="http://covers.openlibrary.org/b/isbn/'.$bookinfo['isbn_10'][0].'-M.jpg" alt="" class="floatleft" style="margin-right: 1rem;">';
-                $mijnoutput .= '<p><a href="https://openlibrary.org/'.$bookinfo['key'].'">'.$bookinfo['title']."</a><br>Published ". $bookinfo['publish_date']."</p>";
-                //$mijnoutput .= '<p><em>'.$bookinfo['tagline']."</em></p>";
+                $mijnoutput .= '<p><a href="https://openlibrary.org/'.$bookinfo['key'].'">'.$bookinfo['title']."</a> - ".$author['name']."<br>";
+                $mijnoutput .= 'Verschenen '. $bookinfo['publish_date'] ." &bull; ";
+                $mijnoutput .= $bookinfo['number_of_pages']." pagina's</p>";
+                // $mijnoutput .= '<p><em>'.$bookinfo['tagline']."</em></p>";
                 // $mijnoutput .= '<p>'.$bookinfo['overview']."</p>";
 
                 // $i = 0;
