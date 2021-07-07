@@ -11,7 +11,7 @@ git submodule add https://github.com/mirthe/kirby_bookblock site/plugins/bookblo
 
 ## Usage
 
-Open Library doesn't require a key, so your good to go.
+Open Library doesn't require a key, so you're good to go.
 
 ## Example 
 
