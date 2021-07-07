@@ -19,7 +19,7 @@ Placed for example with
 
     (bookblock: isbn: 0593135202)
 
-<img src="https://github.com/mirthe/kirby_bookblock/blob/f4341dac8749abb3dd2ba6fa507e9d694fd80a49/example.png" alt="Example of usage">
+<img src="https://github.com/mirthe/kirby_bookblock/blob/edbc29b1719a587816c63f1e78081c489561b769/example.png" alt="Example of usage">
 
 ## Todo
 
