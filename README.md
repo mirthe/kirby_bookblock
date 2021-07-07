@@ -1,6 +1,6 @@
 # Kirby Plugin: bookblock
 
-This plugin allows you to show information for a movie from the Open Library API. 
+This plugin allows you to show information for a book from the Open Library API. 
 Though that might change to a different service at some later point
 
 ## Git submodule
