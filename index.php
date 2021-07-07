@@ -11,44 +11,32 @@
 
                 $isbn = $tag->isbn;
                 
-                $url = "https://openlibrary.org/isbn/".$isbn.".json";
+                // not sure if Google API is (and remains) free. But Open Library doesn't offer description..
+                // $url = "https://openlibrary.org/api/books?bibkeys=ISBN:9780980200447&jscmd=details&format=json";
+                // $url = "https://openlibrary.org/isbn/".$isbn.".json";
+                
+                $url = "https://www.googleapis.com/books/v1/volumes?q=isbn:".$isbn;
                 $ch = curl_init($url);
                 curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
                 $rawdata = curl_exec($ch);
                 curl_close($ch);
-                $bookinfo = json_decode($rawdata,true);
-                // print_r($bookinfo); exit(); 
-
-                // TODO loop by authors[]
-                $authorkey = $bookinfo['authors'][0]['key'];
-                $url = "https://openlibrary.org".$authorkey.".json";
-                $ch = curl_init($url);
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-                $rawdata_credits = curl_exec($ch);
-                curl_close($ch);
-                $author = json_decode($rawdata_credits,true);
-                // print_r($author); exit();
+                $completebookinfo = json_decode($rawdata,true);
+                // print_r($completebookinfo); exit();
+                $bookinfo = $completebookinfo['items'][0]['volumeInfo'];
                 
                 $mijnoutput = '<div class="well" style="overflow: auto;">';
-                $mijnoutput .= '<img src="http://covers.openlibrary.org/b/isbn/'.$bookinfo['isbn_10'][0].'-M.jpg" alt="" class="floatleft" style="margin-right: 1rem;">';
-                $mijnoutput .= '<p><a href="https://openlibrary.org/'.$bookinfo['key'].'">'.$bookinfo['title']."</a> - ".$author['name']."<br>";
-                $mijnoutput .= 'Verschenen '. $bookinfo['publish_date'] ." &bull; ";
-                $mijnoutput .= $bookinfo['number_of_pages']." pagina's</p>";
-                // $mijnoutput .= '<p><em>'.$bookinfo['tagline']."</em></p>";
-                // $mijnoutput .= '<p>'.$bookinfo['overview']."</p>";
+                $mijnoutput .= '<img src="'.$bookinfo['imageLinks']['thumbnail'].'" alt="" class="floatleft" style="margin-right: 1rem;">';
+                $mijnoutput .= '<p><a href="'.$bookinfo['canonicalVolumeLink'].'">'.$bookinfo['title']."</a> - ".$bookinfo['authors'][0]."<br>";
+                $mijnoutput .= 'Gepubliceerd in '. $bookinfo['publishedDate'] ." &bull; ";
+                $mijnoutput .= $bookinfo['pageCount']." pagina's</p>";
+                $mijnoutput .= '<p>'.$bookinfo['description']."</p>";
 
                 // $i = 0;
-                // $mijnoutput .= "<ul class=\"cast\">";
-                // foreach ($credits['cast'] as $genre) {
-                //     $mijnoutput .= '<li>'. $genre['name'] . "</li>";
-                //     if (++$i == 5) break;
-                // }
-                // $mijnoutput .= "</ul>";
-
                 // $mijnoutput .= "<ul class=\"genres\">";
-                // foreach ($bookinfo['genres'] as $genre) {
-                //     $mijnoutput .= '<li>'. $genre['name'] . "</li>";
+                // foreach ($bookinfo['categories'] as $genre) {
+                //     $mijnoutput .= '<li>'. $genre . "</li>";
+                //     if (++$i == 5) break;
                 // }
                 // $mijnoutput .= "</ul>";
 
