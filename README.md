@@ -27,4 +27,5 @@ Placed for example with
 - Might use other service(s)
 - Add sample SCSS to this readme
 - Cleanup code
+- Error handling
 - Lots..
