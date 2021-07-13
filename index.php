@@ -26,11 +26,16 @@
                 $bookinfo = $completebookinfo['items'][0]['volumeInfo'];
                 
                 $mijnoutput = '<div class="well" style="overflow: auto;">';
-                $mijnoutput .= '<img src="'.$bookinfo['imageLinks']['thumbnail'].'" alt="" class="floatleft" style="margin-right: 1rem;">';
+                if (array_key_exists('imageLinks',$bookinfo)){
+                    $mijnoutput .= '<img src="'.$bookinfo['imageLinks']['thumbnail'].'" alt="" class="floatleft" style="margin-right: 1rem;">';
+                }
                 $mijnoutput .= '<p><a href="'.$bookinfo['canonicalVolumeLink'].'">'.$bookinfo['title']."</a> - ".$bookinfo['authors'][0]."<br>";
                 $mijnoutput .= 'Gepubliceerd '. $bookinfo['publishedDate'] ." &bull; ";
                 $mijnoutput .= $bookinfo['pageCount']." pagina's</p>";
-                $mijnoutput .= '<p>'.$bookinfo['description']."</p>";
+
+                if (array_key_exists('description',$bookinfo)){
+                    $mijnoutput .= '<p>'.$bookinfo['description']."</p>";
+                }
 
                 // $i = 0;
                 // $mijnoutput .= "<ul class=\"genres\">";
