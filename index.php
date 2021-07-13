@@ -28,7 +28,7 @@
                 $mijnoutput = '<div class="well" style="overflow: auto;">';
                 $mijnoutput .= '<img src="'.$bookinfo['imageLinks']['thumbnail'].'" alt="" class="floatleft" style="margin-right: 1rem;">';
                 $mijnoutput .= '<p><a href="'.$bookinfo['canonicalVolumeLink'].'">'.$bookinfo['title']."</a> - ".$bookinfo['authors'][0]."<br>";
-                $mijnoutput .= 'Gepubliceerd in '. $bookinfo['publishedDate'] ." &bull; ";
+                $mijnoutput .= 'Gepubliceerd '. $bookinfo['publishedDate'] ." &bull; ";
                 $mijnoutput .= $bookinfo['pageCount']." pagina's</p>";
                 $mijnoutput .= '<p>'.$bookinfo['description']."</p>";
 
