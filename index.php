@@ -34,7 +34,8 @@
                 $mijnoutput .= $bookinfo['pageCount']." pagina's</p>";
 
                 if (array_key_exists('description',$bookinfo)){
-                    $mijnoutput .= '<p>'.$bookinfo['description']."</p>";
+                    $mijnoutput .= '<p>'.substr($bookinfo['description'],0,300)."</p>";
+                    // TODO add collapse is text is longer
                 }
 
                 // $i = 0;
