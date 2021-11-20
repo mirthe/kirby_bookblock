@@ -1,0 +1,14 @@
+{
+    "name": "mirthe/bookblock",
+    "description": "Shows book info from the Google Books API based on isbn",
+    "homepage": "https://github.com/mirthe/kirby_bookblock",
+    "keywords": ["kirby-plugin", "google books", "books", "isbn"],
+    "type": "kirby-plugin",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Mirthe Valentijn",
+            "email": "me@Mirthe.org"
+        }
+    ]
+}
