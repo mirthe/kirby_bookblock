@@ -25,28 +25,29 @@
                 // print_r($completebookinfo); exit();
                 $bookinfo = $completebookinfo['items'][0]['volumeInfo'];
                 
-                $mijnoutput = '<div class="well" style="overflow: auto;">';
+                $mijnoutput = '<div class="well">';
                 if (array_key_exists('imageLinks',$bookinfo)){
-                    $mijnoutput .= '<img src="'.str_replace('http://','https://',$bookinfo['imageLinks']['thumbnail']).'" alt="" class="floatleft" style="margin-right: 1rem;">';
+                    $mijnoutput .= '<div class="well-img"><img src="'.str_replace('http://','https://',$bookinfo['imageLinks']['thumbnail']).'" alt="" width="128"></div>';
                 }
+                $mijnoutput .= '<div class="well-body">';
                 $mijnoutput .= '<p><a href="'.$bookinfo['canonicalVolumeLink'].'">'.$bookinfo['title']."</a> - ".$bookinfo['authors'][0]."<br>";
                 $mijnoutput .= 'Gepubliceerd '. $bookinfo['publishedDate'] ." &bull; ";
                 $mijnoutput .= $bookinfo['pageCount']." pagina's</p>";
 
                 if (array_key_exists('description',$bookinfo)){
-                    $mijnoutput .= '<p>'.substr($bookinfo['description'],0,300)."</p>";
-                    // TODO add collapse is text is longer
+                    $mijnoutput .= '<p>'.mb_strimwidth($bookinfo['description'],0,300, '&#8230;')."</p>";
+                    // TODO add collapse if text is longer
                 }
 
-                // $i = 0;
-                // $mijnoutput .= "<ul class=\"genres\">";
-                // foreach ($bookinfo['categories'] as $genre) {
-                //     $mijnoutput .= '<li>'. $genre . "</li>";
-                //     if (++$i == 5) break;
-                // }
-                // $mijnoutput .= "</ul>";
+                $i = 0;
+                $mijnoutput .= "<ul class=\"genres\">";
+                foreach ($bookinfo['categories'] as $genre) {
+                    $mijnoutput .= '<li>'. $genre . "</li>";
+                    if (++$i == 5) break;
+                }
+                $mijnoutput .= "</ul>";
 
-                $mijnoutput .= '</div>';
+                $mijnoutput .= '</div></div>';
                
                 return $mijnoutput;
             }

@@ -21,6 +21,10 @@ Placed for example with
 
 <img src="https://github.com/mirthe/kirby_bookblock/blob/edbc29b1719a587816c63f1e78081c489561b769/example.png" alt="Example of usage">
 
+## Example CSS
+
+See https://css-tricks.com/how-to-make-a-media-query-less-card-component/
+
 ## Todo
 
 - Offer as an official Kirby plugin
