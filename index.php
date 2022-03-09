@@ -35,17 +35,19 @@
                 $mijnoutput .= $bookinfo['pageCount']." pagina's</p>";
 
                 if (array_key_exists('description',$bookinfo)){
-                    $mijnoutput .= '<p>'.mb_strimwidth($bookinfo['description'],0,300, '&#8230;')."</p>";
+                    $mijnoutput .= '<p>'.mb_strimwidth($bookinfo['description'],0,350, '&#8230;')."</p>";
                     // TODO add collapse if text is longer
                 }
 
-                $i = 0;
-                $mijnoutput .= "<ul class=\"genres\">";
-                foreach ($bookinfo['categories'] as $genre) {
-                    $mijnoutput .= '<li>'. $genre . "</li>";
-                    if (++$i == 5) break;
+                if (array_key_exists('categories',$bookinfo)){
+                    $i = 0;
+                    $mijnoutput .= "<ul class=\"genres\">";
+                    foreach ($bookinfo['categories'] as $genre) {
+                        $mijnoutput .= '<li>'. $genre . "</li>";
+                        if (++$i == 5) break;
+                    }
+                    $mijnoutput .= "</ul>";
                 }
-                $mijnoutput .= "</ul>";
 
                 $mijnoutput .= '</div></div>';
                
