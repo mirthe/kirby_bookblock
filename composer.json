@@ -8,7 +8,14 @@
     "authors": [
         {
             "name": "Mirthe Valentijn",
-            "email": "me@Mirthe.org"
+            "email": "me@Mirthe.org",
+            "homepage": "https://mirthe.org"
+        }
+    ],
+    "funding": [
+        {
+            "type": "buymeacoffee",
+            "url": "https://www.buymeacoffee.com/mirthe"
         }
     ]
 }
