@@ -24,13 +24,17 @@
                 $completebookinfo = json_decode($rawdata,true);
                 // print_r($completebookinfo); exit();
                 $bookinfo = $completebookinfo['items'][0]['volumeInfo'];
-                
+
+                // TODO offer both links?
+                // $booklink = $bookinfo['canonicalVolumeLink'];
+                $booklink = "https://www.goodreads.com/search?q=". $isbn;
+
                 $mijnoutput = '<div class="well">';
                 if (array_key_exists('imageLinks',$bookinfo)){
                     $mijnoutput .= '<div class="well-img"><img src="'.str_replace('http://','https://',$bookinfo['imageLinks']['thumbnail']).'" alt="" width="128"></div>';
                 }
                 $mijnoutput .= '<div class="well-body">';
-                $mijnoutput .= '<p><a href="'.$bookinfo['canonicalVolumeLink'].'">'.$bookinfo['title']."</a> - ".$bookinfo['authors'][0]."<br>";
+                $mijnoutput .= '<p><a href="'.$booklink.'">'.$bookinfo['title']."</a> - ".$bookinfo['authors'][0]."<br>";
                 $mijnoutput .= 'Gepubliceerd '. $bookinfo['publishedDate'] ." &bull; ";
                 $mijnoutput .= $bookinfo['pageCount']." pagina's</p>";
 
