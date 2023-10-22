@@ -1,5 +1,5 @@
 {
-    "name": "mirthe/bookblock",
+    "name": "mirthe/kirby_bookblock",
     "version": "1.0",
     "description": "Shows book info from the Google Books API based on isbn",
     "homepage": "https://github.com/mirthe/kirby_bookblock",
