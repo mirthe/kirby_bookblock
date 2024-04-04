@@ -14,6 +14,7 @@
                 // not sure if Google API is (and remains) free. But Open Library doesn't offer description..
                 // $url = "https://openlibrary.org/api/books?bibkeys=ISBN:9780980200447&jscmd=details&format=json";
                 // $url = "https://openlibrary.org/isbn/".$isbn.".json";
+                // TODO Try others from https://blog.hubspot.com/website/api-books
                 
                 $url = "https://www.googleapis.com/books/v1/volumes?q=isbn:".$isbn;
                 $ch = curl_init($url);
