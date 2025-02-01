@@ -59,7 +59,7 @@
 
                     $mijnoutput .= '</div></div>';
                 } else {
-                    $mijnoutput = '<p>Error in Bookblock..</p>';
+                    $mijnoutput = '<p><small>Error in Bookblock - ISBN '.$isbn. '</small></p>';
                 }
                
                 return $mijnoutput;
