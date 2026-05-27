@@ -20,17 +20,6 @@ Add the following to your config where XX is your key:
 
     'googlebooks.apiKey' => 'XX'
 
-## Caching
-
-In site/config/config.php, configure the cache
-
-    <?php
-    return [
-        'mirthe.bookblock.cache' => [
-            'type' => 'file',
-        ],
-    ];
-
 ## Example 
 
 Placed for example with 

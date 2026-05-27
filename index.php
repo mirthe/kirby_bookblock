@@ -10,67 +10,80 @@
             'html' => function($tag) {
 
                 $isbn = $tag->isbn;
-                
+
                 // not sure if Google API is (and remains) free. But Open Library doesn't offer description..
                 // $url = "https://openlibrary.org/api/books?bibkeys=ISBN:9780980200447&jscmd=details&format=json";
                 // $url = "https://openlibrary.org/isbn/".$isbn.".json";
                 // TODO Try others from https://blog.hubspot.com/website/api-books
-                                
+
                 $cache = kirby()->cache('mirthe.bookblock');
                 $cacheKey = 'google-books-' . $isbn;
 
-                // Retrieve from cache
                 $completebookinfo = $cache->get($cacheKey);
 
                 if ($completebookinfo === null) {
-                    // Not in cache, fetch from API
                     $url = "https://www.googleapis.com/books/v1/volumes?";
                     $url .= "q=isbn:" . $isbn;
-                    $url .= "&key=" . option('googlebooks.apiKey');
+                    $apiKey = option('googlebooks.apiKey');
+                    if (!empty($apiKey)) {
+                        $url .= "&key=" . $apiKey;
+                    }
+
                     $ch = curl_init($url);
                     curl_setopt_array($ch, [
                         CURLOPT_FOLLOWLOCATION => true,
                         CURLOPT_RETURNTRANSFER => true,
                         CURLOPT_USERAGENT      => kirby()->site()->title(),
-                        // CURLOPT_FAILONERROR    => true,
+                        CURLOPT_FAILONERROR    => true,
                     ]);
                     $rawdata = curl_exec($ch);
+                    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
                     curl_close($ch);
 
                     $completebookinfo = json_decode($rawdata, true);
-                    // print_r($completebookinfo); exit();
 
-                    // Store for 7 days (604800 seconds)
-                    $cache->set($cacheKey, $completebookinfo, 604800);
+                    if (is_array($completebookinfo) && !empty($completebookinfo['items'])) {
+                        $cache->set($cacheKey, $completebookinfo, 604800);
+                    }
                 }
 
-                if (isset($completebookinfo['items'])) {
+                if (!empty($completebookinfo['items'][0]['volumeInfo']) && is_array($completebookinfo['items'][0]['volumeInfo'])) {
                     $bookinfo = $completebookinfo['items'][0]['volumeInfo'];
-
-                    // TODO offer both links?
-                    // $booklink = $bookinfo['canonicalVolumeLink'];
-                    $booklink = "https://www.goodreads.com/search?q=". $isbn;
+                    $booklink = $bookinfo['canonicalVolumeLink'] ?? 'https://www.goodreads.com/search?q=' . urlencode($isbn);
+                    $thumbnail = $bookinfo['imageLinks']['thumbnail'] ?? $bookinfo['imageLinks']['smallThumbnail'] ?? '';
+                    $thumbnail = str_replace('http://', 'https://', $thumbnail);
+                    $authors = $bookinfo['authors'] ?? [];
 
                     $mijnoutput = '<div class="well">';
-                    if (array_key_exists('imageLinks', $bookinfo)) {
-                        $mijnoutput .= '<div class="well-img"><img src="'.str_replace('http://', 'https://', $bookinfo['imageLinks']['thumbnail']).'" alt="" width="128"></div>';
+                    if ($thumbnail !== '') {
+                        $mijnoutput .= '<div class="well-img"><img src="'.$thumbnail.'" alt="'.htmlspecialchars($bookinfo['title'] ?? '', ENT_QUOTES).'" width="128"></div>';
                     }
                     $mijnoutput .= '<div class="well-body">';
-                    $mijnoutput .= '<p><a href="'.$booklink.'">'.$bookinfo['title']."</a> - ".$bookinfo['authors'][0]."<br>";
-                    $mijnoutput .= 'Gepubliceerd '. $bookinfo['publishedDate'] ." &bull; ";
-                    $mijnoutput .= $bookinfo['pageCount']." pagina's</p>";
+                    $mijnoutput .= '<p><a href="'.$booklink.'">'.htmlspecialchars($bookinfo['title'] ?? '', ENT_QUOTES)."</a> - ".htmlspecialchars($authors[0] ?? '', ENT_QUOTES)."<br>";
+                    $published = htmlspecialchars($bookinfo['publishedDate'] ?? '', ENT_QUOTES);
+                    $pageCount = htmlspecialchars($bookinfo['pageCount'] ?? '', ENT_QUOTES);
+                    $mijnoutput .= 'Gepubliceerd';
+                    if ($published !== '') {
+                        $mijnoutput .= ' ' . $published;
+                    }
+                    if ($published !== '' && $pageCount !== '' && $pageCount !== '0') {
+                        $mijnoutput .= ' &bull; ';
+                    }
+                    if ($pageCount !== '' && $pageCount !== '0') {
+                        $mijnoutput .= $pageCount . " pagina's";
+                    }
+                    $mijnoutput .= '</p>';
 
-                    if (array_key_exists('description', $bookinfo)) {
+                    if (!empty($bookinfo['description'])) {
                         $mijnoutput .= '<p>'.mb_strimwidth($bookinfo['description'], 0, 350, '&#8230;')."</p>";
-                        // TODO add collapse if text is longer
                     }
 
-                    if (array_key_exists('categories', $bookinfo)) {
+                    if (!empty($bookinfo['categories']) && is_array($bookinfo['categories'])) {
                         $i = 0;
                         $mijnoutput .= "<ul class=\"genres\">";
                         foreach ($bookinfo['categories'] as $genre) {
-                            $mijnoutput .= '<li>'. $genre . "</li>";
-                            if (++$i == 5) {
+                            $mijnoutput .= '<li>'.htmlspecialchars($genre, ENT_QUOTES)."</li>";
+                            if (++$i === 5) {
                                 break;
                             }
                         }
@@ -79,9 +92,9 @@
 
                     $mijnoutput .= '</div></div>';
                 } else {
-                    $mijnoutput = '<p><small>Error in Bookblock - ISBN '.$isbn. '</small></p>';
+                    $mijnoutput = '<p><small>Error in Bookblock - ISBN '.htmlspecialchars($isbn, ENT_QUOTES). '</small></p>';
                 }
-               
+
                 return $mijnoutput;
             }
         ]
