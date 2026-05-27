@@ -13,6 +13,24 @@ git submodule add https://github.com/mirthe/kirby_bookblock site/plugins/bookblo
 
 Google Books doesn't appear to require a key, so you're good to go.
 
+Uhm, strike that, it does now, if you don't want to run into quota issues that is. 
+Go to [Google Cloud Console](https://console.cloud.google.com/) → APIs & Services → Credentials to create one.
+
+Add the following to your config where XX is your key:
+
+    'googlebooks.apiKey' => 'XX'
+
+## Caching
+
+In site/config/config.php, set the cache to files
+
+    <?php
+    return [
+        'mirthe.bookblock.cache' => [
+            'type' => 'file',
+        ],
+    ];
+
 ## Example 
 
 Placed for example with 

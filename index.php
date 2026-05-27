@@ -15,16 +15,35 @@
                 // $url = "https://openlibrary.org/api/books?bibkeys=ISBN:9780980200447&jscmd=details&format=json";
                 // $url = "https://openlibrary.org/isbn/".$isbn.".json";
                 // TODO Try others from https://blog.hubspot.com/website/api-books
-                
-                $url = "https://www.googleapis.com/books/v1/volumes?q=isbn:".$isbn;
-                $ch = curl_init($url);
-                curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-                curl_setopt($ch, CURLOPT_USERAGENT, kirby()->site()->title());
-                $rawdata = curl_exec($ch);
-                curl_close($ch);
-                $completebookinfo = json_decode($rawdata, true);
-                // print_r($completebookinfo); exit();
+                                
+                $cache = kirby()->cache('mirthe.bookblock');
+                $cacheKey = 'google-books-' . $isbn;
+
+                // Retrieve from cache
+                $completebookinfo = $cache->get($cacheKey);
+
+                if ($completebookinfo === null) {
+                    // Not in cache, fetch from API
+                    $url = "https://www.googleapis.com/books/v1/volumes?";
+                    $url .= "q=isbn:" . $isbn;
+                    $url .= "&key=" . option('googlebooks.apiKey');
+                    $ch = curl_init($url);
+                    curl_setopt_array($ch, [
+                        CURLOPT_FOLLOWLOCATION => true,
+                        CURLOPT_RETURNTRANSFER => true,
+                        CURLOPT_USERAGENT      => kirby()->site()->title(),
+                        // CURLOPT_FAILONERROR    => true,
+                    ]);
+                    $rawdata = curl_exec($ch);
+                    curl_close($ch);
+
+                    $completebookinfo = json_decode($rawdata, true);
+                    // print_r($completebookinfo); exit();
+
+                    // Store for 7 days (604800 seconds)
+                    $cache->set($cacheKey, $completebookinfo, 604800);
+                }
+
                 if (isset($completebookinfo['items'])) {
                     $bookinfo = $completebookinfo['items'][0]['volumeInfo'];
 
