@@ -22,7 +22,7 @@ Add the following to your config where XX is your key:
 
 ## Caching
 
-In site/config/config.php, set the cache to files
+In site/config/config.php, configure the cache
 
     <?php
     return [
