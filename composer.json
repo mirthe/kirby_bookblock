@@ -1,6 +1,6 @@
 {
     "name": "mirthe/kirby_bookblock",
-    "version": "1.0",
+    "version": "1.1",
     "description": "Shows book info from the Google Books API based on isbn",
     "homepage": "https://github.com/mirthe/kirby_bookblock",
     "keywords": ["kirby-plugin", "google books", "books", "isbn"],
