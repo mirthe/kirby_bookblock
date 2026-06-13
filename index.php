@@ -2,6 +2,18 @@
     'options' => [
         'cache' => true
     ],
+    'translations' => [
+        'nl' => [
+            'mirthe.bookblock.published' => 'Gepubliceerd',
+            'mirthe.bookblock.pages' => '{{count}} pagina\'s',
+            'mirthe.bookblock.error' => 'Fout in Bookblock - ISBN {{isbn}}'
+        ],
+        'en' => [
+            'mirthe.bookblock.published' => 'Published',
+            'mirthe.bookblock.pages' => '{{count}} pages',
+            'mirthe.bookblock.error' => 'Error in Bookblock - ISBN {{isbn}}'
+        ]
+    ],
     'tags' => [
         'bookblock' => [
             'attr' =>[
@@ -56,13 +68,13 @@
 
                     $mijnoutput = '<div class="well">';
                     if ($thumbnail !== '') {
-                        $mijnoutput .= '<div class="well-img"><img src="'.$thumbnail.'" alt="'.htmlspecialchars($bookinfo['title'] ?? '', ENT_QUOTES).'" width="128"></div>';
+                        $mijnoutput .= '<div class="well-img"><a href="'.$booklink.'" target="_blank"><img src="'.$thumbnail.'" alt="'.htmlspecialchars($bookinfo['title'] ?? '', ENT_QUOTES).'" width="128"></a></div>';
                     }
                     $mijnoutput .= '<div class="well-body">';
                     $mijnoutput .= '<p><a href="'.$booklink.'">'.htmlspecialchars($bookinfo['title'] ?? '', ENT_QUOTES)."</a> - ".htmlspecialchars($authors[0] ?? '', ENT_QUOTES)."<br>";
                     $published = htmlspecialchars($bookinfo['publishedDate'] ?? '', ENT_QUOTES);
                     $pageCount = htmlspecialchars($bookinfo['pageCount'] ?? '', ENT_QUOTES);
-                    $mijnoutput .= 'Gepubliceerd';
+                    $mijnoutput .= t('mirthe.bookblock.published');
                     if ($published !== '') {
                         $mijnoutput .= ' ' . $published;
                     }
@@ -70,7 +82,7 @@
                         $mijnoutput .= ' &bull; ';
                     }
                     if ($pageCount !== '' && $pageCount !== '0') {
-                        $mijnoutput .= $pageCount . " pagina's";
+                        $mijnoutput .= ' ' . t('mirthe.bookblock.pages', ['count' => $pageCount]);
                     }
                     $mijnoutput .= '</p>';
 
@@ -92,7 +104,7 @@
 
                     $mijnoutput .= '</div></div>';
                 } else {
-                    $mijnoutput = '<p><small>Error in Bookblock - ISBN '.htmlspecialchars($isbn, ENT_QUOTES). '</small></p>';
+                    $mijnoutput = '<p><small>'.t('mirthe.bookblock.error', ['isbn' => htmlspecialchars($isbn, ENT_QUOTES)]).'</small></p>';
                 }
 
                 return $mijnoutput;
