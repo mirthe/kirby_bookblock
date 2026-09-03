@@ -82,7 +82,7 @@
                         $mijnoutput .= ' &bull; ';
                     }
                     if ($pageCount !== '' && $pageCount !== '0') {
-                        $mijnoutput .= ' ' . t('mirthe.bookblock.pages', ['count' => $pageCount]);
+                        $mijnoutput .= ' ' . tt('mirthe.bookblock.pages', ['count' => $pageCount]);
                     }
                     $mijnoutput .= '</p>';
 
@@ -104,7 +104,7 @@
 
                     $mijnoutput .= '</div></div>';
                 } else {
-                    $mijnoutput = '<p><small>'.t('mirthe.bookblock.error', ['isbn' => htmlspecialchars($isbn, ENT_QUOTES)]).'</small></p>';
+                    $mijnoutput = '<p><small>'.tt('mirthe.bookblock.error', ['isbn' => htmlspecialchars($isbn, ENT_QUOTES)]).'</small></p>';
                 }
 
                 return $mijnoutput;
