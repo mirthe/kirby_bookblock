@@ -47,12 +47,13 @@
                         CURLOPT_FOLLOWLOCATION => true,
                         CURLOPT_RETURNTRANSFER => true,
                         CURLOPT_USERAGENT      => kirby()->site()->title(),
-                        CURLOPT_FAILONERROR    => true,
                     ]);
                     $rawdata = curl_exec($ch);
                     $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
                     if ($rawdata === false) {
                         $failureReason = 'Google Books request failed (HTTP ' . $httpCode . '): ' . curl_error($ch);
+                    } elseif ($httpCode < 200 || $httpCode >= 300) {
+                        $failureReason = 'Google Books returned HTTP ' . $httpCode;
                     }
                     curl_close($ch);
 
