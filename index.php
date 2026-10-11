@@ -32,6 +32,7 @@
                 $cacheKey = 'google-books-' . $isbn;
 
                 $completebookinfo = $cache->get($cacheKey);
+                $failureReason = 'Google Books returned no matching volume.';
 
                 if ($completebookinfo === null) {
                     $url = "https://www.googleapis.com/books/v1/volumes?";
@@ -50,9 +51,16 @@
                     ]);
                     $rawdata = curl_exec($ch);
                     $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                    if ($rawdata === false) {
+                        $failureReason = 'Google Books request failed (HTTP ' . $httpCode . '): ' . curl_error($ch);
+                    }
                     curl_close($ch);
 
                     $completebookinfo = json_decode($rawdata, true);
+
+                    if (!empty($completebookinfo['error']['message'])) {
+                        $failureReason = 'Google Books API error (HTTP ' . $httpCode . '): ' . $completebookinfo['error']['message'];
+                    }
 
                     if (is_array($completebookinfo) && !empty($completebookinfo['items'])) {
                         $cache->set($cacheKey, $completebookinfo, 604800);
@@ -104,6 +112,14 @@
 
                     $mijnoutput .= '</div></div>';
                 } else {
+                    if (function_exists('errorMonitorLog')) {
+                        errorMonitorLog(
+                            'BOOKBLOCK',
+                            'Google Books lookup failed for ISBN ' . $isbn . ': ' . $failureReason,
+                            __FILE__,
+                            __LINE__
+                        );
+                    }
                     $mijnoutput = '<p><small>'.tt('mirthe.bookblock.error', ['isbn' => htmlspecialchars($isbn, ENT_QUOTES)]).'</small></p>';
                 }
 
