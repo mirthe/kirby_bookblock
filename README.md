@@ -1,7 +1,7 @@
 # Kirby Plugin: bookblock
 
-This plugin allows you to show information for a book from the Google Books API. 
-Though that might change to a different service at some later point
+This plugin displays book information from Open Library by ISBN. Edition
+information is combined with available information from the associated work.
 
 ## Git submodule
 
@@ -11,14 +11,9 @@ git submodule add https://github.com/mirthe/kirby_bookblock site/plugins/bookblo
 
 ## Usage
 
-Google Books doesn't appear to require a key, so you're good to go.
+No API key is required.
 
-Uhm, strike that, it does now, if you don't want to run into quota issues that is. 
-Go to [Google Cloud Console](https://console.cloud.google.com/) → APIs & Services → Credentials to create one.
-
-Add the following to your config where XX is your key:
-
-    'googlebooks.apiKey' => 'XX'
+The block displays the available title, authors, publication date, page count, description, subjects, series and cover. The available fields depend on the edition and work records in Open Library. Page count is also derived from the edition's pagination when a numeric page count is not provided.
 
 ## Example 
 
@@ -35,7 +30,6 @@ See https://css-tricks.com/how-to-make-a-media-query-less-card-component/
 ## Todo
 
 - Offer as an official Kirby plugin
-- Might use other service(s)
 - Add sample SCSS to this readme
 - Cleanup code
 - Error handling

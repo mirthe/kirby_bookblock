@@ -1,9 +1,9 @@
 {
     "name": "mirthe/kirby_bookblock",
-    "version": "1.3",
-    "description": "Shows book info from the Google Books API based on isbn",
+    "version": "2",
+    "description": "Shows book info from the Open Library API based on isbn",
     "homepage": "https://github.com/mirthe/kirby_bookblock",
-    "keywords": ["kirby-plugin", "google books", "books", "isbn"],
+    "keywords": ["kirby-plugin", "open library", "books", "isbn"],
     "type": "kirby-plugin",
     "license": "MIT",
     "authors": [
