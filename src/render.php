@@ -99,6 +99,13 @@ if (!function_exists('mirthe_bookblock_render')) {
             $categories = [];
         }
 
+        $categories = array_values(array_filter(
+            $categories,
+            static fn ($genre): bool => is_string($genre)
+                && $genre !== ''
+                && strpos($genre, ':') === false
+        ));
+
         $details = [
             'mirthe.bookblock.series' => $bookInfo['series'] ?? [],
         ];
@@ -224,14 +231,6 @@ if (!function_exists('mirthe_bookblock_render')) {
             $output .= '<ul class="genres">';
 
             foreach (array_slice($categories, 0, 4) as $genre) {
-                if (
-                    !is_string($genre)
-                    || $genre === ''
-                    || preg_match('/^[a-z0-9_-]+:[^=]+=.+$/i', $genre)
-                ) {
-                    continue;
-                }
-
                 $output .= '<li>'
                     . htmlspecialchars(
                         $genre,
