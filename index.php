@@ -5,7 +5,8 @@ require_once __DIR__ . '/src/render.php';
 
 Kirby::plugin('mirthe/bookblock', [
     'options' => [
-        'cache' => true
+        'cache' => true,
+        'email' => option('openlibrary.email'),
     ],
     'translations' => [
         'nl' => [

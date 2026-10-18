@@ -5,6 +5,10 @@ if (!function_exists('mirthe_bookblock_get_volume_info')) {
     function mirthe_bookblock_get_volume_info(string $isbn): array
     {
         $cache = kirby()->cache('mirthe.bookblock');
+        $userAgent = kirby()->site()->title()
+            . ' ('
+            . option('mirthe.bookblock.email')
+            . ')';
 
         // Normaliseer de ISBN voor de aanvraag en cache.
         $isbn = preg_replace('/[^0-9Xx]/', '', $isbn);
@@ -25,8 +29,7 @@ if (!function_exists('mirthe_bookblock_get_volume_info')) {
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_CONNECTTIMEOUT => 5,
                 CURLOPT_TIMEOUT        => 15,
-                CURLOPT_USERAGENT      => kirby()->site()->title()
-                    . ' (Kirby book metadata plugin; contact: me@mirthe.org)',
+                CURLOPT_USERAGENT      => $userAgent,
             ]);
 
             $rawData = curl_exec($ch);
@@ -71,8 +74,7 @@ if (!function_exists('mirthe_bookblock_get_volume_info')) {
                         CURLOPT_RETURNTRANSFER => true,
                         CURLOPT_CONNECTTIMEOUT => 5,
                         CURLOPT_TIMEOUT        => 15,
-                        CURLOPT_USERAGENT      => kirby()->site()->title()
-                            . ' (Kirby book metadata plugin; contact: me@mirthe.org)',
+                        CURLOPT_USERAGENT      => $userAgent,
                     ]);
 
                     $workRaw = curl_exec($workCh);
@@ -149,8 +151,7 @@ if (!function_exists('mirthe_bookblock_get_volume_info')) {
                         CURLOPT_RETURNTRANSFER => true,
                         CURLOPT_CONNECTTIMEOUT => 5,
                         CURLOPT_TIMEOUT        => 10,
-                        CURLOPT_USERAGENT      => kirby()->site()->title()
-                            . ' (Kirby book metadata plugin; contact: me@mirthe.org)',
+                        CURLOPT_USERAGENT      => $userAgent,
                     ]);
 
                     $authorRaw = curl_exec($authorCh);

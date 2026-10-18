@@ -1,7 +1,6 @@
 # Kirby Plugin: bookblock
 
-This plugin displays book information from Open Library by ISBN. Edition
-information is combined with available information from the associated work.
+This plugin displays book information from Open Library by ISBN. Edition information is combined with available information from the associated work.
 
 ## Git submodule
 
@@ -12,6 +11,14 @@ git submodule add https://github.com/mirthe/kirby_bookblock site/plugins/bookblo
 ## Usage
 
 No API key is required.
+
+Open Library asks applications to identify themselves with a `User-Agent` that includes a contact e-mail. The plugin uses the Kirby site title and the e-mail configured in `site/config/config.php`:
+
+```php
+return [
+    'openlibrary.email' => 'you@example.com',
+];
+```
 
 The block displays the available title, authors, publication date, page count, description, subjects, series and cover. The available fields depend on the edition and work records in Open Library. Page count is also derived from the edition's pagination when a numeric page count is not provided.
 
